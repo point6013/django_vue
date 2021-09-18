@@ -10,7 +10,12 @@ from rest_framework.views import APIView
 
 from django.http import JsonResponse
 from article.models import Article
-from article.serializers import ArticleListSerializer
+from article.serializers import ArticleListSerializer, ArticleDetailSerializer
+
+from article.permission import IsAdminUserOrReadOnly
+from rest_framework import mixins
+from rest_framework import generics
+from rest_framework.permissions import IsAdminUser
 
 
 # 普通视图
@@ -28,6 +33,14 @@ def article_list(request):
         return Response(serielizer.data, status=status.HTTP_400_BAD_REQUEST)
 
 
+# 列表的结构可以可以同样的修改
+
+class ArticleList(generics.ListCreateAPIView):
+    permission_classes = [IsAdminUserOrReadOnly]
+    queryset = Article.objects.all()
+    serializer_class = ArticleListSerializer
+
+
 # 基于类的视图
 
 class ArticleDetail(APIView):
@@ -42,12 +55,12 @@ class ArticleDetail(APIView):
 
     def get(self, request, pk):
         article = self.get_object(pk)
-        serializer = ArticleListSerializer(article)
+        serializer = ArticleDetailSerializer(article)
         return Response(serializer.data)
 
     def put(self, request, pk):
         article = self.get_object(pk)
-        serializer = ArticleListSerializer(article, data=request.data)
+        serializer = ArticleDetailSerializer(article, data=request.data)
 
         if serializer.is_valid():
             serializer.save()
@@ -60,4 +73,9 @@ class ArticleDetail(APIView):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
-#
+# drf 通用视图
+class ArticleDetail(generics.RetrieveUpdateDestroyAPIView):
+    """文章详情视图"""
+    permission_classes = [IsAdminUserOrReadOnly]
+    queryset = Article.objects.all()
+    serializer_class = ArticleDetailSerializer
