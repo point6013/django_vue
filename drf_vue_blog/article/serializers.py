@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from article.models import Article
+from user_info.serializers import UserDescSerializer
 
 
 # class ArticleListSerializer(serializers.Serializer):
@@ -18,16 +19,24 @@ from article.models import Article
 # 提供了修改数据需要用到的 .create() 、 .update() 方法的默认实现
 
 class ArticleListSerializer(serializers.ModelSerializer):
+    author = UserDescSerializer(read_only=True)
+    url = serializers.HyperlinkedIdentityField(view_name='article:detail')
+
     class Meta:
         model = Article
-        # fields = ['id',
-        #           'title',
-        #           'created']
-        fields = "__all__"
+        fields = [
+            # 'id',
+            'url',
+            'title',
+            'body',
+            'created',
+            # 'updated',
+            'author',
+        ]
+        # fields = "__all__"
 
 
 class ArticleDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = Article
         fields = '__all__'
-        read_only_fields =['author']
