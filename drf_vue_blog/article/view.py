@@ -40,6 +40,11 @@ class ArticleList(generics.ListCreateAPIView):
     queryset = Article.objects.all()
     serializer_class = ArticleListSerializer
 
+    # 这里面的serializer是serializer_class的实例，并且已经携带着验证后的数据
+    # save方法可以接受关键字参数作为额外的需要保存的数据
+    def perform_create(self, serializer):
+        serializer.save(author=self.request.user)
+
 
 # 基于类的视图
 
