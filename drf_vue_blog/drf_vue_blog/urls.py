@@ -22,6 +22,7 @@ from article import view
 router = DefaultRouter()
 router.register(r'ariticle', view.ArticleViewSet)
 router.register(r'category', view.CategoryViewSet)
+router.register(r'tag', view.TagViewSet)
 
 urlpatterns = [
     path('admin/', admin.site.urls),

@@ -11,10 +11,12 @@ from rest_framework.views import APIView
 from django.http import JsonResponse
 from article.models import Article
 from article.models import Category
+from article.models import Tag
 from rest_framework import viewsets
-from article.serializers import ArticleSerializer
+from article.serializers import ArticleSerializer,ArticleDetailSerializer
 from article.serializers import CategorySerializer
 from article.serializers import CategoryDetailSerializer
+from article.serializers import TagSerializer
 from django_filters.rest_framework import DjangoFilterBackend
 # from article.serializers import ArticleListSerializer, ArticleDetailSerializer
 
@@ -95,7 +97,13 @@ from rest_framework.permissions import IsAdminUser
 
 class ArticleViewSet(viewsets.ModelViewSet):
     queryset = Article.objects.all()
-    serializer_class = ArticleSerializer
+
+    def get_serializer_class(self):
+        if self.action == 'list':
+            return ArticleSerializer
+        else:
+            return ArticleDetailSerializer
+
     permission_classes = [IsAdminUserOrReadOnly]
     # django_filters
     filter_backends = [DjangoFilterBackend]
@@ -120,4 +128,10 @@ class CategoryViewSet(viewsets.ModelViewSet):
             return CategoryDetailSerializer
 
     # serializer_class = CategorySerializer
+    permission_classes = [IsAdminUserOrReadOnly]
+
+
+class TagViewSet(viewsets.ModelViewSet):
+    queryset = Tag.objects.all()
+    serializer_class = TagSerializer
     permission_classes = [IsAdminUserOrReadOnly]

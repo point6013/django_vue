@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from article.models import Article, Category
+from article.models import Article, Category, Tag
 from user_info.serializers import UserDescSerializer
 
 
@@ -53,7 +53,7 @@ class CategorySerializer(serializers.ModelSerializer):
         read_only_fields = ['created']
 
 
-class ArticleSerializer(serializers.HyperlinkedModelSerializer):
+class ArticleBaseSerializer(serializers.HyperlinkedModelSerializer):
     """博文序列化器"""
     author = UserDescSerializer(read_only=True)
     # category
@@ -62,15 +62,46 @@ class ArticleSerializer(serializers.HyperlinkedModelSerializer):
     category_id = serializers.IntegerField(write_only=True, allow_null=True, required=False)
 
     # categoy id 字段的验证器
+    tags = serializers.SlugRelatedField(queryset=Tag.objects.all(), many=True, required=False, slug_field='text')
+
+    def to_internal_value(self, data):
+        tags_data = data.get('tags')
+
+        if isinstance(tags_data, list):
+            for text in tags_data:
+                if not Tag.objects.filter(text=text).exists():
+                    Tag.objects.create(text=text)
+
+        return super().to_internal_value(data)
 
     def validate_category_id(self, value):
         if not Category.objects.filter(id=value).exist() and value is not None:
             raise serializers.ValidationError("Category with id {} not exists".format(value))
         return value
 
+
+class ArticleSerializer(ArticleBaseSerializer):
     class Meta:
         model = Article
         fields = "__all__"
+        extra_kwargs = {'body': {'write_only': True}}
+
+
+class ArticleDetailSerializer(ArticleBaseSerializer):
+    # 渲染后的正文
+    body_html = serializers.SerializerMethodField()
+    # 渲染后的目录
+    toc_html = serializers.SerializerMethodField()
+
+    def get_body_html(self, obj):
+        return obj.get_md()[0]
+
+    def get_toc_html(self, obj):
+        return obj.get_md()[1]
+
+    class Meta:
+        model = Article
+        fields = '__all__'
 
 
 class ArticleCategoryDetailSerializer(serializers.ModelSerializer):
@@ -89,3 +120,24 @@ class CategoryDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = Category
         fields = ['id', 'title', 'created', 'articles']
+
+
+class TagSerializer(serializers.HyperlinkedModelSerializer):
+    """标签序列化器"""
+
+    def check_tag_obj_exists(self, validated_data):
+        text = validated_data.get('text')
+        if Tag.objects.filter(text=text).exists():
+            raise serializers.ValidationError("Tag with text{} exists".format(text))
+
+    def create(self, validated_data):
+        self.check_tag_obj_exists(validated_data)
+        return super().create(validated_data)
+
+    def update(self, instance, validated_data):
+        self.check_tag_obj_exists(validated_data)
+        return super().update(instance, validated_data)
+
+    class Meta:
+        model = Tag
+        fields = "__all__"
