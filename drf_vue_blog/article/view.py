@@ -12,11 +12,13 @@ from django.http import JsonResponse
 from article.models import Article
 from article.models import Category
 from article.models import Tag
+from article.models import Avatar
 from rest_framework import viewsets
-from article.serializers import ArticleSerializer,ArticleDetailSerializer
+from article.serializers import ArticleSerializer, ArticleDetailSerializer
 from article.serializers import CategorySerializer
 from article.serializers import CategoryDetailSerializer
 from article.serializers import TagSerializer
+from article.serializers import AvatarSerializer
 from django_filters.rest_framework import DjangoFilterBackend
 # from article.serializers import ArticleListSerializer, ArticleDetailSerializer
 
@@ -134,4 +136,10 @@ class CategoryViewSet(viewsets.ModelViewSet):
 class TagViewSet(viewsets.ModelViewSet):
     queryset = Tag.objects.all()
     serializer_class = TagSerializer
+    permission_classes = [IsAdminUserOrReadOnly]
+
+
+class AvatarViewSet(viewsets.ModelViewSet):
+    queryset = Avatar.objects.all()
+    serializer_class = AvatarSerializer
     permission_classes = [IsAdminUserOrReadOnly]

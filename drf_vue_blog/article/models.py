@@ -10,6 +10,10 @@ from django.contrib.auth.models import User
 from markdown import Markdown
 
 
+class Avatar(models.Model):
+    content = models.ImageField(upload_to='avatar/%Y%m%d')
+
+
 class Category(models.Model):
     """文章分类"""
     title = models.CharField(max_length=100)
