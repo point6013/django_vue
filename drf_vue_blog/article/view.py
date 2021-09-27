@@ -22,7 +22,7 @@ from article.serializers import AvatarSerializer
 from django_filters.rest_framework import DjangoFilterBackend
 # from article.serializers import ArticleListSerializer, ArticleDetailSerializer
 
-from article.permission import IsAdminUserOrReadOnly
+from article.permissions import IsAdminUserOrReadOnly
 from rest_framework import mixins
 from rest_framework import generics
 from rest_framework.permissions import IsAdminUser

@@ -5,7 +5,7 @@ from django.shortcuts import render
 from rest_framework import viewsets
 from comment.models import Comment
 from comment.serializers import CommentSerializer
-from permissions import IsOwnerOrReadOnly
+from comment.permissions import IsOwnerOrReadOnly
 
 
 class CommentViewSet(viewsets.ModelViewSet):
