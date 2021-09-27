@@ -80,6 +80,7 @@ class ArticleBaseSerializer(serializers.HyperlinkedModelSerializer):
             raise serializers.ValidationError('Avatar with id {} not exists'.format(value))
         return value
 
+    # 'C:\Users\Fred-Huang\Pictures\background.jpg'
     def to_internal_value(self, data):
         tags_data = data.get('tags')
 
