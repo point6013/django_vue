@@ -55,6 +55,9 @@ class Article(models.Model):
     # tag
     tags = models.ManyToManyField(Tag, blank=True, related_name='articles')
 
+    # 标题图
+    avatar = models.ForeignKey(Avatar, null=True, blank=True, on_delete=models.SET_NULL, related_name='articles')
+
     class Meta:
         ordering = ['-created']
 
