@@ -20,12 +20,15 @@ from rest_framework.routers import DefaultRouter
 from article import view
 from django.conf import settings
 from django.conf.urls.static import static
+from comment.views import CommentViewSet
 
 router = DefaultRouter()
 router.register(r'ariticle', view.ArticleViewSet)
 router.register(r'category', view.CategoryViewSet)
 router.register(r'tag', view.TagViewSet)
 router.register(r'avatar', view.AvatarViewSet)
+router.register(r'comment', CommentViewSet)
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
