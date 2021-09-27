@@ -23,7 +23,7 @@ class CommentSerializer(serializers.ModelSerializer):
     parent_id = serializers.IntegerField(write_only=True, allow_null=True, required=False)
 
     def update(self, instance, validated_data):
-        # validated_data.pop('parent_id', None)
+        validated_data.pop('parent_id', None)
         return super().update(instance, validated_data)
 
     class Meta:
