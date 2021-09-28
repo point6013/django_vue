@@ -22,13 +22,15 @@ from django.conf import settings
 from django.conf.urls.static import static
 from comment.views import CommentViewSet
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
+from user_info.views import UserViewSet
 
 router = DefaultRouter()
-router.register(r'ariticle', view.ArticleViewSet)
+router.register(r'article', view.ArticleViewSet)
 router.register(r'category', view.CategoryViewSet)
 router.register(r'tag', view.TagViewSet)
 router.register(r'avatar', view.AvatarViewSet)
 router.register(r'comment', CommentViewSet)
+router.register(r'user', UserViewSet)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -36,8 +38,8 @@ urlpatterns = [
     # path("api/article/", include('article.urls', namespace='article'))
 
     path('api/', include(router.urls)),
-    path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
-    path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh')
+    # path('api/token/', TokenObtainPairView.as_view, name='token_obtain_pair'),
+    # path('api/token/refresh/', TokenRefreshView.as_view, name='token_refresh'),
 ]
 
 if settings.DEBUG:
