@@ -94,7 +94,7 @@ class ArticleBaseSerializer(serializers.HyperlinkedModelSerializer):
         return super().to_internal_value(data)
 
     def validate_category_id(self, value):
-        if not Category.objects.filter(id=value).exist() and value is not None:
+        if not Category.objects.filter(id=value).exists() and value is not None:
             raise serializers.ValidationError("Category with id {} not exists".format(value))
         return value
 

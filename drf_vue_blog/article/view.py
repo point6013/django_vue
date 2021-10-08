@@ -58,7 +58,7 @@ from rest_framework.permissions import IsAdminUser
 #
 # # 基于类的视图
 #
-# class ArticleDetail(APIView):
+# class ArticleDetail.vue(APIView):
 #     """文章详情视图"""
 #
 #     def get_object(self, pk):
@@ -89,7 +89,7 @@ from rest_framework.permissions import IsAdminUser
 #
 #
 # # drf 通用视图
-# class ArticleDetail(generics.RetrieveUpdateDestroyAPIView):
+# class ArticleDetail.vue(generics.RetrieveUpdateDestroyAPIView):
 #     """文章详情视图"""
 #     permission_classes = [IsAdminUserOrReadOnly]
 #     queryset = Article.objects.all()
