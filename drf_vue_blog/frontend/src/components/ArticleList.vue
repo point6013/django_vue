@@ -14,16 +14,15 @@
     </div>
     <div id="paginator">
         <span v-if="is_page_exists('previous')">
-            <router-link :to="{name:'Home', query:{page:get_page_param('previous')}}">
+            <router-link :to="get_path('previous')">
                 Prev
             </router-link>
-
         </span>
         <span class="current-page">
-            {{get_page_param('current')}}
+            {{ get_page_param('current') }}
         </span>
         <span v-if="is_page_exists('next')">
-            <router-link :to="{name:'Home',query:{page:get_page_param('next')}}">
+            <router-link :to="get_path('next')">
                 Next
             </router-link>
         </span>
@@ -80,14 +79,43 @@
             },
             get_article_data: function () {
                 let url = '/api/article'
-                const page = Number(this.$route.query.page)
-                if (!isNaN(page) && (page !== 0)) {
-                    url = url + '/?page=' + page
+                // const page = Number(this.$route.query.page)
+                let params = new URLSearchParams();
+                params.appendIfExists('page', this.$route.query.page)
+                params.appendIfExists('search', this.$route.query.search)
+                const paramsString = params.toString();
+                if (paramsString.charAt(0) !== '') {
+                    url += '/?' + paramsString
                 }
+                //
+                // if (!isNaN(page) && (page !== 0)) {
+                //     url = url + '/?page=' + page
+                // }
                 axios.get(url).then(
                     response => (this.info = response.data)
                 ).catch(error => console.log(error))
 
+            },
+            get_path: function (direction) {
+                let url = '';
+                try {
+                    switch (direction) {
+                        case 'next':
+                            if (this.info.next !== undefined) {
+                                url += (new URL(this.info.next)).search
+                            }
+                            break;
+                        case 'previous':
+                            if (this.info.previous !== undefined) {
+                                url += (new URL(this.info.previous)).search
+                            }
+                            break;
+                            }
+                }
+                catch {
+                    return url
+                }
+                return url
             }
         },
         watch: {

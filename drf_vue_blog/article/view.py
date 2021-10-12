@@ -108,12 +108,12 @@ class ArticleViewSet(viewsets.ModelViewSet):
 
     permission_classes = [IsAdminUserOrReadOnly]
     # django_filters
-    filter_backends = [DjangoFilterBackend]
-    filterset_fields = ['author__username', 'title']
+    # filter_backends = [DjangoFilterBackend]
+    # filterset_fields = ['author__username', 'title']
 
     # 模糊搜索条件，rest_framework 的filter
-    # filter_backends = [filters.SearchFilter]
-    # search_fields = ['title', 'author__username']
+    filter_backends = [filters.SearchFilter]
+    search_fields = ['title', 'author__username']
 
     def perform_create(self, serializer):
         serializer.save(author=self.request.user)
