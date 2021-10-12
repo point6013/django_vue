@@ -20,14 +20,6 @@
     import BlogHeader from "../components/BlogHeader";
     import BlogFooter from "../components/BlogFooter";
     import axios from 'axios'
-    // import 'highlight.js/styles/github-dark-dimmed.css';
-    // import markdownItTocDoneRight  from "markdown-it-toc-done-right"
-    // import marked from 'marked'
-    // import 'highlight.js/styles/monokai-sublime.css'
-    // import hljs from "highlight.js";
-    // import hljs from 'highlight.js/lib/common';
-    // import hljsVuePlugin from "@highlightjs/vue-plugin";
-    // import VueMarkdownIt from 'vue3-markdown-it'
     import 'highlight.js/styles/monokai.css'
     import '../assets/pygments.css'
     // 导入pygments.css
